@@ -1,6 +1,6 @@
 # PHP 5.3.29(php-fpm) with extensions
 
-This is fork from helder/php-5.3, add these php extensions:
+This is fork from helder/php-5.3, fix some bugs, and add these php extensions:
 
 - iconv
 - mbstring
@@ -9,3 +9,5 @@ This is fork from helder/php-5.3, add these php extensions:
 - gd
 - phpredis
 - mssql
+- xdebug
+- yaf
