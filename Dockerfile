@@ -111,6 +111,22 @@ RUN cd /tmp \
       && tar -xof phpredis.tar.gz -C /usr/src/php/ext/phpredis --strip-components=1 \
       && rm -rf /tmp/*
 
+# download xdebug to php ext folder
+
+RUN cd /tmp \
+      && mkdir -p /usr/src/php/ext/xdebug \
+      && curl -sL "https://xdebug.org/files/xdebug-2.2.7.tgz" -o xdebug.tgz \
+      && tar -xof xdebug.tgz -C /usr/src/php/ext/xdebug --strip-components=1 \
+      && rm -rf /tmp/*
+
+# download yaf to php ext folder
+
+RUN cd /tmp \
+      && mkdir -p /usr/src/php/ext/yaf \
+      && curl -sL "https://github.com/laruence/yaf/archive/yaf-2.3.5.tar.gz" -o yaf.tar.gz \
+      && tar -xof yaf.tar.gz -C /usr/src/php/ext/yaf --strip-components=1 \
+      && rm -rf /tmp/*
+
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -124,11 +140,9 @@ RUN mkdir /usr/include/freetype2/freetype \
         && chmod +x /usr/local/bin/docker-php-*
 
 # install php extension
-RUN docker-php-ext-install iconv mbstring mcrypt mysqli \
+RUN docker-php-ext-install iconv mbstring mcrypt mysqli phpredis yaf xdebug \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install gd \
-        && docker-php-ext-configure phpredis \
-        && docker-php-ext-install phpredis \
         && docker-php-ext-configure mssql --with-mssql=/usr/local/freetds \
         && docker-php-ext-install mssql
 
@@ -170,6 +184,9 @@ RUN set -ex \
 
 # fix php-fpm listen address
 RUN sed -i -e "s/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g" /usr/local/etc/php-fpm.d/www.conf
+
+# fix xdebug library path
+RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20090626/xdebug.so' | tee /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 EXPOSE 9000
 CMD ["php-fpm"]
