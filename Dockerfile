@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       make \
       pkg-config \
       re2c \
+      libldap2-dev -y \
     && apt-get clean \
     && rm -r /var/lib/apt/lists/*
 
@@ -145,6 +146,7 @@ RUN docker-php-ext-install iconv mbstring mcrypt mysqli phpredis yaf xdebug \
         && docker-php-ext-install gd \
         && docker-php-ext-configure mssql --with-mssql=/usr/local/freetds \
         && docker-php-ext-install mssql \
+        && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
         && docker-php-ext-install ldap
 
 WORKDIR /var/www/html
