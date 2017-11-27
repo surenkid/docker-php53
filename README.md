@@ -11,3 +11,4 @@ This is fork from helder/php-5.3, fix some bugs, and add these php extensions:
 - mssql
 - xdebug
 - yaf
+- ldap
