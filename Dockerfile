@@ -188,5 +188,8 @@ RUN sed -i -e "s/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g" /usr/local/etc
 # fix xdebug library path
 RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20090626/xdebug.so' | tee /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+# set yaf to name space mode
+RUN echo 'yaf.use_namespace = 1' | tee -a /usr/local/etc/php/conf.d/docker-php-ext-yaf.ini
+
 EXPOSE 9000
 CMD ["php-fpm"]
