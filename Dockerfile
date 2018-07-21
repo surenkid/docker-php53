@@ -186,7 +186,17 @@ RUN set -ex \
 RUN sed -i -e "s/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g" /usr/local/etc/php-fpm.d/www.conf
 
 # fix xdebug library path
-RUN echo -e 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20090626/xdebug.so\nxdebug.idekey = PHPSTORM\nxdebug.remote_host = host.docker.internal\nxdebug.default_enable = 1\nxdebug.remote_autostart = 1\nxdebug.remote_connect_back = 0\nxdebug.remote_enable = 1\nxdebug.remote_handler = dbgp\nxdebug.remote_port = 9000' | tee /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN { \
+    echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20090626/xdebug.so'; \
+    echo 'xdebug.idekey = PHPSTORM'; \
+    echo 'xdebug.remote_host = host.docker.internal'; \
+    echo 'xdebug.default_enable = 1'; \
+    echo 'xdebug.remote_autostart = 1'; \
+    echo 'xdebug.remote_connect_back = 0'; \
+    echo 'xdebug.remote_enable = 1'; \
+    echo 'xdebug.remote_handler = dbgp'; \
+    echo 'xdebug.remote_port = 9000'; \
+  } | tee /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # set yaf to name space mode
 RUN echo 'yaf.use_namespace = 1' | tee -a /usr/local/etc/php/conf.d/docker-php-ext-yaf.ini
